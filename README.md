@@ -10,6 +10,8 @@ Please use the R script ['tutorial_template.R'](https://github.com/sian-phillips
 
 Cheat sheets are a useful tool for reminding yourself of key functions for specific packages. A folder containing useful cheat sheets for this tutorila can be found [here](https://github.com/sian-phillips/date-time-in-R-tutorial/tree/main/cheat_sheets).
 
+The dataset used in this tutorial called 'ufo.csv' was downloaded from [kaggle](https://www.kaggle.com/NUFORC/ufo-sightings). Kaggle is an online community of data scientists and machine learning practitioners and the website contains lots of very interesting and unique datasets. 
+
 I hope you find the tutorial useful and that you have fun learning a new data science skill! 
 
 This tutorial was created by Sian Phillips, a student at Edinburgh University.    
