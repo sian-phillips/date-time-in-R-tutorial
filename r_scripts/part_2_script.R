@@ -25,13 +25,6 @@ ufo <- ufo_sightings %>%
          duration_sighting_s = "duration (seconds)",
          duration_sighting_hm = "duration (hours/min)")  # Rename column names 
                                                         # that contain spaces.
-  
-# Inspect the data
-summary(ufo)
-glimpse(ufo)
-
-# Check the class of 'datetime'
-class(ufo$datetime)
 
 # Convert 'datetime' into a dttm
 ufo <- ufo %>%
@@ -52,13 +45,14 @@ ufo <- ufo %>%
 
 # OlsonNames()
 
+ufo <- ufo %>%
+  mutate(datetime_51 = with_tz(datetime, tz = "America/Los_Angeles"))
+
+
 edinburgh <- filter(ufo, city == "edinburgh (uk/scotland)" & shape == "sphere")
 
 (ed_datetime <- ymd_hms(edinburgh$datetime))
 (tokyo_datetime <- with_tz(ed_datetime, tz = "Asia/Tokyo"))
-
-ufo <- ufo %>%
-  mutate(datetime_51 = with_tz(datetime, tz = "America/Los_Angeles"))
 
 # Time spans ----
 
@@ -67,25 +61,23 @@ ufo <- ufo %>%
          time_duration = as.duration(time_interval),
          time_period = as.period(time_interval))
 
+# Arithmetic ----
+
+ufo <- ufo %>%
+  mutate(end_time = datetime + seconds(duration_sighting_s))
+
+ufo_clean <- ufo %>%
+  mutate(datetime = (datetime - (days(5) + minutes(5) + seconds(5))))
+
+# Visualisations ----
+
+year(ufo$date) <- 0
+
 ufo %>% 
-  count(day = floor_date(datetime, "day")) %>% 
-  ggplot(aes(day, n)) +
-  geom_line() 
+  ggplot(aes(date)) + 
+  geom_freqpoly(binwidth = 1)
 
 
-ufo %>% 
-  mutate(date = yday(date)) %>% 
-  ggplot(aes(date)) +
-  geom_freqpoly(binwidth = 1) +
-  scale_colour_viridis_c() +
-  labs(title = "",
-       subtitle = "",
-       x = "Day of year",
-       y = "") +
-  theme(text = element_text(size = 15))
-
-
-           
 ufo %>%
   mutate(wday = wday(datetime, label = TRUE)) %>% 
   ggplot(aes(x = wday, fill = wday)) +
